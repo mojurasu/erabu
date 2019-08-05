@@ -41,6 +41,7 @@ fn main() -> Result<(), Box<std::error::Error>> {
     match matches {
         Opt::Add { collection_name, items } => subcommands::add::add_items(collection_name, items)?,
         Opt::Del { collection_name, items } => subcommands::del::del_items(collection_name, items)?,
+        Opt::Pick { collection_name } => subcommands::pick::pick_item(collection_name)?,
         _ => ()
     }
     Ok(())

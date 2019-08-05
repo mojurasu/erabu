@@ -2,6 +2,7 @@ use std::fs::File;
 use std::path::PathBuf;
 
 use dirs::home_dir;
+use rand::seq::SliceRandom;
 use serde_json::{json, Value};
 
 #[derive(Debug)]
@@ -68,6 +69,13 @@ impl Collection {
     pub fn remove(&mut self, items: Vec<String>) -> &mut Collection {
         self.items.retain(|item| !items.contains(item));
         self
+    }
+
+    pub fn pick(self) -> String {
+        match self.items.choose(&mut rand::thread_rng()) {
+            Some(i) => i.to_string(),
+            None => "None".to_string()
+        }
     }
 
     pub fn save(&mut self) -> Result<(), Box<std::error::Error>> {
