@@ -13,22 +13,25 @@ enum Opt {
         #[structopt(name = "items")]
         items: Vec<String>,
     },
-    #[structopt(name = "pick")]
-    Pick {
-        #[structopt(name = "collection")]
-        collection: String,
-    },
-    #[structopt(name = "list")]
-    List {
-        #[structopt(name = "collection")]
-        collection: String,
-    },
+
     #[structopt(name = "del")]
     Del {
         #[structopt(name = "collection")]
-        collection: String,
-        #[structopt(name = "item")]
-        item: String,
+        collection_name: String,
+        #[structopt(name = "items")]
+        items: Vec<String>,
+    },
+
+    #[structopt(name = "pick")]
+    Pick {
+        #[structopt(name = "collection")]
+        collection_name: String,
+    },
+
+    #[structopt(name = "list")]
+    List {
+        #[structopt(name = "collection")]
+        collection_name: String,
     },
 }
 
@@ -37,6 +40,7 @@ fn main() -> Result<(), Box<std::error::Error>> {
     println!("{:#?}", matches);
     match matches {
         Opt::Add { collection_name, items } => subcommands::add::add_items(collection_name, items)?,
+        Opt::Del { collection_name, items } => subcommands::del::del_items(collection_name, items)?,
         _ => ()
     }
     Ok(())

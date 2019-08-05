@@ -34,7 +34,7 @@ impl Collection {
             let file = File::open(collection_file)?;
             let collections: Value = match serde_json::from_reader(file) {
                 Ok(v) => v,
-                Err(e) => {
+                Err(_) => {
                     return Ok(Collection {
                         name,
                         items: vec![],
@@ -65,6 +65,11 @@ impl Collection {
         self
     }
 
+    pub fn remove(&mut self, items: Vec<String>) -> &mut Collection {
+        self.items.retain(|item| !items.contains(item));
+        self
+    }
+
     pub fn save(&mut self) -> Result<(), Box<std::error::Error>> {
         let filepath = collection_file()?;
 
@@ -75,7 +80,7 @@ impl Collection {
             let rofile = File::open(&filepath)?;
             let mut collections: Value = match serde_json::from_reader(&rofile) {
                 Ok(v) => v,
-                Err(e) => {
+                Err(_) => {
                     // In a future version this should backup the broken file first
                     json!({})
                 }
