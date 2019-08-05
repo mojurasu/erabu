@@ -32,7 +32,15 @@ impl Collection {
             })
         } else {
             let file = File::open(collection_file)?;
-            let collections: Value = serde_json::from_reader(file)?;
+            let collections: Value = match serde_json::from_reader(file) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Ok(Collection {
+                        name,
+                        items: vec![],
+                    });
+                }
+            };
 
             let empty = vec![];
             let items: Vec<Value> = match collections.get(&name) {
@@ -65,7 +73,13 @@ impl Collection {
             serde_json::to_writer(file, &json!({&self.name: self.items}))?;
         } else {
             let rofile = File::open(&filepath)?;
-            let mut collections: Value = serde_json::from_reader(&rofile)?;
+            let mut collections: Value = match serde_json::from_reader(&rofile) {
+                Ok(v) => v,
+                Err(e) => {
+                    // In a future version this should backup the broken file first
+                    json!({})
+                }
+            };
             collections[&self.name] = json!(self.items);
 
             let wfile = File::create(&filepath)?;
