@@ -37,7 +37,6 @@ enum Opt {
 
 fn main() -> Result<(), Box<std::error::Error>> {
     let matches = Opt::from_args();
-    println!("{:#?}", matches);
     match matches {
         Opt::Add { collection_name, items } => subcommands::add::add_items(collection_name, items)?,
         Opt::Del { collection_name, items } => subcommands::del::del_items(collection_name, items)?,
