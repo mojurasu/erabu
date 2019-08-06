@@ -6,31 +6,31 @@ mod collection;
 #[derive(StructOpt, Debug)]
 #[structopt(name = "erabu")]
 enum Opt {
-    #[structopt(name = "add")]
+    #[structopt(name = "add", about = "Add an item to a collection")]
     Add {
-        #[structopt(name = "collection")]
+        #[structopt(name = "collection", help = "The name of the collection")]
         collection_name: String,
-        #[structopt(name = "items")]
+        #[structopt(name = "items", help = "A list of items to add")]
         items: Vec<String>,
     },
 
-    #[structopt(name = "del")]
+    #[structopt(name = "del", about = "Delete an item from a collection")]
     Del {
-        #[structopt(name = "collection")]
+        #[structopt(name = "collection", help = "The name of the collection")]
         collection_name: String,
-        #[structopt(name = "items")]
+        #[structopt(name = "items", help = "A list of items to remove")]
         items: Vec<String>,
     },
 
-    #[structopt(name = "pick")]
+    #[structopt(name = "pick", about = "Pick a random item from a collection")]
     Pick {
-        #[structopt(name = "collection")]
+        #[structopt(name = "collection", help = "The name of the collection")]
         collection_name: String,
     },
 
-    #[structopt(name = "list")]
+    #[structopt(name = "list", about = "List all collections or the items of a collection")]
     List {
-        #[structopt(name = "collection")]
+        #[structopt(name = "collection", help = "The name of the collection, Optional")]
         collection_name: Option<String>,
     },
 }

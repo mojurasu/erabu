@@ -3,8 +3,7 @@ name = "erabu"
 version = "0.1.0"
 authors = ["SitiSchu <admin@sitischu.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Store items in collections and randomly pick an item from them."
 
 [dependencies]
 structopt = "0.2.18"
