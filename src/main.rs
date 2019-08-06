@@ -31,7 +31,7 @@ enum Opt {
     #[structopt(name = "list")]
     List {
         #[structopt(name = "collection")]
-        collection_name: String,
+        collection_name: Option<String>,
     },
 }
 
@@ -42,7 +42,10 @@ fn main() -> Result<(), Box<std::error::Error>> {
         Opt::Add { collection_name, items } => subcommands::add::add_items(collection_name, items)?,
         Opt::Del { collection_name, items } => subcommands::del::del_items(collection_name, items)?,
         Opt::Pick { collection_name } => subcommands::pick::pick_item(collection_name)?,
-        _ => ()
+        Opt::List { collection_name } => match collection_name {
+            Some(name) => subcommands::list::list_items(name)?,
+            None => subcommands::list::list_collections()?
+        },
     }
     Ok(())
 }

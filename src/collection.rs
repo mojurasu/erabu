@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fs::File;
 use std::path::PathBuf;
 
@@ -8,7 +9,7 @@ use serde_json::{json, Value};
 #[derive(Debug)]
 pub struct Collection {
     name: String,
-    items: Vec<String>,
+    pub items: Vec<String>,
 }
 
 fn collection_file() -> Result<PathBuf, Box<std::error::Error>> {
@@ -20,6 +21,19 @@ fn collection_file() -> Result<PathBuf, Box<std::error::Error>> {
         }
     };
     Ok(filepath)
+}
+
+pub fn get_collections() -> Result<Vec<String>, Box<std::error::Error>> {
+    let collection_file = collection_file()?;
+    let collections: Vec<String> = if !collection_file.exists() {
+        vec![]
+    } else {
+        let file = File::open(collection_file)?;
+        let collections: HashMap<String, Value> = serde_json::from_reader(file)?;
+
+        collections.keys().map(|key| key.to_string()).collect()
+    };
+    Ok(collections)
 }
 
 impl Collection {
