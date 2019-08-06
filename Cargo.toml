@@ -4,6 +4,11 @@ version = "0.1.0"
 authors = ["SitiSchu <admin@sitischu.com>"]
 edition = "2018"
 description = "Store items in collections and randomly pick an item from them."
+readme = "README.md"
+repository = "https://github.com/mojurasu/erabu"
+license = "GPL-3.0-only"
+keywords = ["cli"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 structopt = "0.2.18"
