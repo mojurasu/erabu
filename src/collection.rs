@@ -37,7 +37,7 @@ pub fn get_collections() -> Result<Vec<String>, Box<std::error::Error>> {
 }
 
 impl Collection {
-    pub fn new(name: String) -> Result<Collection, Box<std::error::Error>> {
+    pub fn new(name: &String) -> Result<Collection, Box<std::error::Error>> {
         let collection_file = collection_file()?;
         let name = name.to_lowercase();
         if !collection_file.exists() {
