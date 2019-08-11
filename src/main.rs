@@ -26,6 +26,8 @@ enum Opt {
     Pick {
         #[structopt(name = "collection", help = "The name of the collection")]
         collection_name: String,
+        #[structopt(long = "no-format", help = "Don't format the output")]
+        no_format: bool,
     },
 
     #[structopt(name = "list", about = "List all collections or the items of a collection")]
@@ -40,7 +42,7 @@ fn main() -> Result<(), Box<std::error::Error>> {
     match matches {
         Opt::Add { collection_name, items } => subcommands::add::add_items(collection_name, items)?,
         Opt::Del { collection_name, items } => subcommands::del::del_items(collection_name, items)?,
-        Opt::Pick { collection_name } => subcommands::pick::pick_item(collection_name)?,
+        Opt::Pick { collection_name, no_format } => subcommands::pick::pick_item(collection_name, no_format)?,
         Opt::List { collection_name } => match collection_name {
             Some(name) => subcommands::list::list_items(name)?,
             None => subcommands::list::list_collections()?
