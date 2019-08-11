@@ -17,9 +17,17 @@ Removed items: Boss
 
 ### Picking a random item
 ```
+// "Pretty" output
 $ erabu pick watch
-Diesel
+Picked item: Diesel
 ```
+
+```
+// "Raw" output
+$ erabu pick watch --no-format
+SuperDry
+```
+
 
 ### Listing all Collections
 ```
