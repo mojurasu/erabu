@@ -6,13 +6,15 @@ use dirs::home_dir;
 use rand::seq::SliceRandom;
 use serde_json::{json, Value};
 
+use crate::BoxResult;
+
 #[derive(Debug)]
 pub struct Collection {
     name: String,
     pub items: Vec<String>,
 }
 
-fn collection_file() -> Result<PathBuf, Box<std::error::Error>> {
+fn collection_file() -> BoxResult<PathBuf> {
     let filename = &format!(".{}_collections", &env!("CARGO_PKG_NAME"));
     let filepath: PathBuf = match home_dir() {
         Some(path) => [path, PathBuf::from(filename)].iter().collect(),
@@ -23,7 +25,7 @@ fn collection_file() -> Result<PathBuf, Box<std::error::Error>> {
     Ok(filepath)
 }
 
-pub fn get_collections() -> Result<Vec<String>, Box<std::error::Error>> {
+pub fn get_collections() -> BoxResult<Vec<String>> {
     let collection_file = collection_file()?;
     let collections: Vec<String> = if !collection_file.exists() {
         vec![]
@@ -37,7 +39,7 @@ pub fn get_collections() -> Result<Vec<String>, Box<std::error::Error>> {
 }
 
 impl Collection {
-    pub fn new(name: &String) -> Result<Collection, Box<std::error::Error>> {
+    pub fn new(name: &String) -> BoxResult<Collection> {
         let collection_file = collection_file()?;
         let name = name.to_lowercase();
         if !collection_file.exists() {
@@ -92,7 +94,7 @@ impl Collection {
         }
     }
 
-    pub fn save(&mut self) -> Result<(), Box<std::error::Error>> {
+    pub fn save(&mut self) -> BoxResult<()> {
         let filepath = collection_file()?;
 
         if !filepath.exists() {

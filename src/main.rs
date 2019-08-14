@@ -3,6 +3,8 @@ use structopt::StructOpt;
 mod subcommands;
 mod collection;
 
+pub type BoxResult<T> = Result<T, Box<std::error::Error>>;
+
 #[derive(StructOpt, Debug)]
 #[structopt(name = "erabu")]
 enum Opt {
@@ -38,7 +40,7 @@ enum Opt {
 }
 
 fn main() -> Result<(), Box<std::error::Error>> {
-    let matches = Opt::from_args();
+    let matches: Opt = Opt::from_args();
     match matches {
         Opt::Add { collection_name, items } => subcommands::add::add_items(collection_name, items)?,
         Opt::Del { collection_name, items } => subcommands::del::del_items(collection_name, items)?,
