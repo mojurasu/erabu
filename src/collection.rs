@@ -11,22 +11,12 @@ use crate::BoxResult;
 #[derive(Debug)]
 pub struct Collection {
     name: String,
+    file: PathBuf,
     pub items: Vec<String>,
 }
 
-fn collection_file() -> BoxResult<PathBuf> {
-    let filename = &format!(".{}_collections", &env!("CARGO_PKG_NAME"));
-    let filepath: PathBuf = match home_dir() {
-        Some(path) => [path, PathBuf::from(filename)].iter().collect(),
-        None => {
-            PathBuf::from(filename)
-        }
-    };
-    Ok(filepath)
-}
-
-pub fn get_collections() -> BoxResult<Vec<String>> {
-    let collection_file = collection_file()?;
+pub fn get_collections(file: String) -> BoxResult<Vec<String>> {
+    let collection_file = PathBuf::from(shellexpand::tilde(&file).to_string());
     let collections: Vec<String> = if !collection_file.exists() {
         vec![]
     } else {
@@ -39,21 +29,23 @@ pub fn get_collections() -> BoxResult<Vec<String>> {
 }
 
 impl Collection {
-    pub fn new(name: &String) -> BoxResult<Collection> {
-        let collection_file = collection_file()?;
+    pub fn new(name: &String, file: String) -> BoxResult<Collection> {
+        let collection_file = PathBuf::from(shellexpand::tilde(&file).to_string());
         let name = name.to_lowercase();
         if !collection_file.exists() {
             Ok(Collection {
                 name,
+                file: collection_file,
                 items: vec![],
             })
         } else {
-            let file = File::open(collection_file)?;
+            let file = File::open(&collection_file)?;
             let collections: Value = match serde_json::from_reader(file) {
                 Ok(v) => v,
                 Err(_) => {
                     return Ok(Collection {
                         name,
+                        file: collection_file,
                         items: vec![],
                     });
                 }
@@ -71,7 +63,7 @@ impl Collection {
                              .map(|item| item.as_str().unwrap().to_string())
                              .collect::<Vec<String>>();
 
-            Ok(Collection { name, items })
+            Ok(Collection { name, file: collection_file, items })
         }
     }
 
@@ -95,7 +87,7 @@ impl Collection {
     }
 
     pub fn delete(&mut self) -> BoxResult<()> {
-        let filepath = collection_file().unwrap();
+        let filepath = &self.file;
         let rofile = File::open(&filepath).unwrap();
         let mut collections: HashMap<String, Vec<String>> = match serde_json::from_reader(&rofile) {
             Ok(v) => v,
@@ -111,7 +103,7 @@ impl Collection {
     }
 
     pub fn save(&mut self) -> BoxResult<()> {
-        let filepath = collection_file()?;
+        let filepath = &self.file;
 
         if !filepath.exists() {
             let file = File::create(&filepath)?;

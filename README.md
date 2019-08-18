@@ -55,5 +55,16 @@ Collection: watch
      Items: Diesel, Festina, SuperDry
 ```
 
+### Using a different file location
+```
+$ erabu add watch Boss Diesel Festina SuperDry --file ~/.erabu
+Added items: Boss, Diesel, Festina, SuperDry
+```
+
+```
+$ erabu pick watch --file ~/.erabu
+Picked item: Diesel
+```
+
 ## Misc
-Collections are stored as json at `~/.erabu-collections`
+Collections by default are stored as json at `~/.erabu-collections` or the file specified with `--file`
