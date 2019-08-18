@@ -94,6 +94,22 @@ impl Collection {
         }
     }
 
+    pub fn delete(&mut self) -> BoxResult<()> {
+        let filepath = collection_file().unwrap();
+        let rofile = File::open(&filepath).unwrap();
+        let mut collections: HashMap<String, Vec<String>> = match serde_json::from_reader(&rofile) {
+            Ok(v) => v,
+            Err(_) => {
+                // In a future version this should backup the broken file first
+                HashMap::new()
+            }
+        };
+        collections.remove(&self.name);
+        let wfile = File::create(&filepath)?;
+        serde_json::to_writer(&wfile, &collections)?;
+        Ok(())
+    }
+
     pub fn save(&mut self) -> BoxResult<()> {
         let filepath = collection_file()?;
 

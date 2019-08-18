@@ -15,6 +15,20 @@ $ erabu del watch Boss
 Removed items: Boss
 ```
 
+### Removing a collection
+```
+// With confirmation
+$ erabu del watch
+Remove the collection watch ? [y/N] yes
+Removed collection: watch
+```
+
+```
+// Without confirmation
+$ erabu del watch -f
+Removed collection: watch
+```
+
 ### Picking a random item
 ```
 // "Pretty" output
@@ -27,7 +41,6 @@ Picked item: Diesel
 $ erabu pick watch --no-format
 SuperDry
 ```
-
 
 ### Listing all Collections
 ```

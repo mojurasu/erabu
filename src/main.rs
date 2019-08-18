@@ -22,6 +22,8 @@ enum Opt {
         collection_name: String,
         #[structopt(name = "items", help = "A list of items to remove")]
         items: Vec<String>,
+        #[structopt(short = "f", long = "force", help = "Don't ask for confirmation")]
+        force: bool,
     },
 
     #[structopt(name = "pick", about = "Pick a random item from a collection")]
@@ -43,7 +45,7 @@ fn main() -> BoxResult<()> {
     let matches: Opt = Opt::from_args();
     match matches {
         Opt::Add { collection_name, items } => subcommands::add::add_items(collection_name, items)?,
-        Opt::Del { collection_name, items } => subcommands::del::del_items(collection_name, items)?,
+        Opt::Del { collection_name, items, force } => subcommands::del::del_items(collection_name, items, force)?,
         Opt::Pick { collection_name, no_format } => subcommands::pick::pick_item(collection_name, no_format)?,
         Opt::List { collection_name } => match collection_name {
             Some(name) => subcommands::list::list_items(name)?,
